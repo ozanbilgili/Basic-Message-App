@@ -31,7 +31,6 @@ struct LoginView: View {
     @State var isLoginMode = false
     @State var email = ""
     @State var password = ""
-    
     @State var shouldShowImagePicker = false
     
     var body: some View {
@@ -40,25 +39,32 @@ struct LoginView: View {
                 
                 VStack(spacing: 16) {
                     Picker(selection: $isLoginMode, label: Text("Picker here")) {
+                       
                         Text("Login")
                             .tag(true)
+                       
                         Text("Create Account")
                             .tag(false)
                     }.pickerStyle(SegmentedPickerStyle())
-                        
+                    
                     if !isLoginMode {
+                        
                         Button {
                             shouldShowImagePicker.toggle()
+                             
                         } label: {
                             
                             VStack {
+                                
                                 if let image = self.image {
+                                    
                                     Image(uiImage: image)
                                         .resizable()
                                         .scaledToFill()
                                         .frame(width: 128, height: 128)
                                         .cornerRadius(64)
                                 } else {
+                                    
                                     Image(systemName: "person.fill")
                                         .font(.system(size: 64))
                                         .padding()
@@ -76,13 +82,16 @@ struct LoginView: View {
                         TextField("Email", text: $email)
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
-                        SecureField("Password", text: $password)
+                            SecureField("Password", text: $password)
+                        
                     }
                     .padding(12)
                     .background(Color.white)
                     
                     Button {
+                        
                         handleAction()
+                        
                     } label: {
                         HStack {
                             Spacer()
@@ -108,20 +117,31 @@ struct LoginView: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
             ImagePicker(image: $image)
+           
         }
     }
     
     @State var image: UIImage?
     
     private func handleAction() {
+      
         if isLoginMode {
-
+           
             loginUser()
+         
         } else {
+            
             createNewAccount()
-
+          
         }
     }
+    private func clearPassword (){
+        password = ""
+        if (!isLoginMode){
+            email = ""
+        }
+    }
+    
     
     private func loginUser() {
         FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { result, err in
@@ -134,6 +154,7 @@ struct LoginView: View {
             print("Successfully logged in as user: \(result?.user.uid ?? "")")
             
             self.loginStatusMessage = "Successfully logged in as user: \(result?.user.uid ?? "")"
+            
         }
     }
     
@@ -153,6 +174,7 @@ struct LoginView: View {
             
             self.persistImageToStorage()
         }
+        clearPassword()
     }
     
     private func persistImageToStorage() {
