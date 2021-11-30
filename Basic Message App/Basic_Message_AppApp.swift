@@ -8,11 +8,10 @@
 import SwiftUI
 
 @main
-struct Basic_Message_AppApp: App {
+struct LBTASwiftUIFirebaseChatApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            MainMessagesView()
         }
     }
 }
-
